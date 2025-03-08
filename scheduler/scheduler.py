@@ -69,7 +69,8 @@ def execute_job(self, job_id):
         # Simulate job execution (sleep for the execution time)
         
         time.sleep(job.estimated_duration)
-        if Job.objects.get(id=job_id).status == "Running":
+        job = Job.objects.get(id=job_id)
+        if job.status == "Running":
             job.status = 'Completed'
             job.end_time = datetime.now()
             job.save()
