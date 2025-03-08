@@ -27,9 +27,9 @@ $(document).ready(function () {
         },
         init() {
 
-            // setInterval(() => {
-            //     dashboardApp.getData();
-            // }, 1000);
+            setInterval(() => {
+                dashboardApp.getData();
+            }, 1000);
 
             const socket = new WebSocket('ws://localhost:8000/ws/chat/');
             socket.onopen = function(e) {

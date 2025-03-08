@@ -47,7 +47,7 @@ class JobScheduler:
                             app.control.purge()
                             app.control.revoke(job_fetch.taskid, terminate=True)
                             self.add_job(job_fetch)
-                            print(f"Task {job_fetch.taskid} terminated.")
+                            print(f"Task {job_fetch.taskid, job_fetch.name} terminated.")
 
 
 # Global job scheduler instance
@@ -94,8 +94,6 @@ def schedule_jobs():
         scheduler.add_pending_running_job(run)
 
     # Process the jobs in the order of priority and deadline
-    print(pending_jobs,"PENDING")
-    print(running_pending_job,"PENDING RUNNING")
     while scheduler.job_queue:
         next_job = scheduler.get_next_job()
         
@@ -103,7 +101,14 @@ def schedule_jobs():
             # Execute the next job in the scheduler
             scheduler.check_task_priority(next_job)
             execute_job.apply_async((next_job.id,))
-    
 
 
+def group_schedule_job():
 
+    pending_jobs = Job.objects.filter(Q(status='Pending'))
+
+    for job in pending_jobs:
+        scheduler.add_job(job)
+    while scheduler.job_queue:
+        next_job = scheduler.get_next_job()
+        execute_job.apply_async((next_job.id,))

@@ -12,7 +12,7 @@ from rest_framework.pagination import PageNumberPagination
 from .serializers import JobSerializer, JobCreateSerializer
 from rest_framework.filters import SearchFilter
 from rest_framework import status, generics
-from .scheduler import schedule_jobs
+from .scheduler import schedule_jobs, group_schedule_job
 from config.celery import app
 from django.db.models import F, ExpressionWrapper, fields, Sum, Count
 from django.utils import timezone
@@ -150,7 +150,7 @@ def start_schedule_jobs_view(request):
     """
     try:
         # Call the start_schedule_jobs function
-        schedule_jobs()
+        group_schedule_job()
 
         # Return a success response
         return Response(
