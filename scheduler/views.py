@@ -82,7 +82,7 @@ class JobList(generics.ListAPIView):
             'failed': jobs_query_set.filter(status="Failed").count(),
 
         }
-        jobs_query_set.filter(start_time__isnull=False, end_time__isnull=False, status="Completed")
+        jobs_query_set = jobs_query_set.filter(start_time__isnull=False, end_time__isnull=False, status="Completed")
         duration_expression = ExpressionWrapper(F('end_time') - F('start_time'), output_field=fields.DurationField())
         jobs_with_duration = jobs_query_set.annotate(duration=duration_expression)
         total_duration = jobs_with_duration.aggregate(total_duration=Sum('duration'))['total_duration']
