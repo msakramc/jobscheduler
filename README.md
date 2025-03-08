@@ -97,6 +97,12 @@ PROJECT STRUCTURE
 # LIST ALL JOB FOR A USER
 # http://localhost:8000/api/v1/getjobs/
 
+# BY DEFAULT WHEN YOU CREATE JOB IT WILL STARTS TO EXECUTE
+# BUT IF YOU NEED THIS SCENARIO LIKE CREATE ALL JOBS ONE BY ONE INTO THE TABLE AND THEN IF YOU NEED TO EXECUTE ALL AT ONCE FOLLOW THESE STEPS
+1. In views.py line 129, comment schedule_jobs() function
+2. Then try to create job one by one such that no job will execute, it will only create in the table
+3. Now go to this url,  http://localhost:8000/api/v1/runjob/ , It will start to execute all jobs
+
 
 
 
