@@ -111,6 +111,7 @@ $(document).ready(function () {
                 let html = ''
                 this.data.forEach((element, index) => {
                     html += `<tr class="${index % 2 == 0 ? 'even' : 'odd'}">
+                        <td>${element.id}</td>
                         <td>${element.name}</td>
                         <td>${element.estimated_duration}</td>
                         <td>${element.priority}</td>

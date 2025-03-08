@@ -76,6 +76,26 @@ PROJECT STRUCTURE
 # 1 django terminal and 3 celery terminal
 
 
+# API DETAILS
+
+# NEW USER CREATION
+# YOU MUST CREATE A SUPERUSER FIRST THEN ONLY YOU CAN LOGIN TO ADMIN AND CREATE NEW USERS
+1. python manage.py createsuperuser
+# http://localhost:8000/admin
+
+# DASHBOARD:
+# http://localhost:8000
+
+# SUBMIT JOBS:
+# You can submit jobs via Dashboard or RESTAPI
+# http://localhost:8000/api/v1/createjob/
+
+# FETCH A JOB: 
+# http://localhost:8000/api/v1/{job_id}/job/
+
+# LIST ALL JOB FOR A USER
+# http://localhost:8000/api/v1/getjobs/
+
 
 
 

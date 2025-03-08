@@ -80,6 +80,33 @@ def execute_job(self, job_id):
         job.save()
         print(f"Job {job.name} Failed")
         return False
+    
+@shared_task(bind=True)
+def execute_group_job(self, job_id):
+    try:
+        """Celery task to execute a job."""
+        job = Job.objects.get(id=job_id)
+
+        # Set job status to running
+        job.start_time = datetime.now()
+        job.taskid = self.request.id
+        job.status = 'Running'
+
+        job.save()
+
+        # Simulate job execution (sleep for the execution time)
+        time.sleep(job.estimated_duration)
+
+        job.status = 'Completed'
+        job.end_time = datetime.now()
+        job.save()
+        # Ater the current job is completed, check if there is a pending job
+        print(f"Job {job.name} Completed")
+    except Exception as e:
+        job.status = 'Failed'
+        job.save()
+        print(f"Job {job.name} Failed")
+        return False
 
 def schedule_jobs():
     """Schedule jobs based on priority and deadlines."""
@@ -94,6 +121,8 @@ def schedule_jobs():
         scheduler.add_pending_running_job(run)
 
     # Process the jobs in the order of priority and deadline
+    print(pending_jobs,"PENDING")
+    print(running_pending_job,"PENDING RUNNING")
     while scheduler.job_queue:
         next_job = scheduler.get_next_job()
         
@@ -106,9 +135,9 @@ def schedule_jobs():
 def group_schedule_job():
 
     pending_jobs = Job.objects.filter(Q(status='Pending'))
-
     for job in pending_jobs:
         scheduler.add_job(job)
     while scheduler.job_queue:
         next_job = scheduler.get_next_job()
-        execute_job.apply_async((next_job.id,))
+        if next_job:
+            execute_group_job.apply_async((next_job.id,))

@@ -16,6 +16,7 @@ from .scheduler import schedule_jobs, group_schedule_job
 from config.celery import app
 from django.db.models import F, ExpressionWrapper, fields, Sum, Count
 from django.utils import timezone
+from rest_framework.views import APIView
 
 @login_required
 def dashboard(request):
@@ -120,27 +121,23 @@ class JobCreateView(generics.CreateAPIView):
     serializer_class = JobCreateSerializer
     permission_classes = [IsAuthenticated]
 
-    # def perform_create(self, serializer):
-    #     serializer.save(user=self.request.user)
-
     def perform_create(self, serializer):
         # Create the job and save it
         Job.objects.all().update(execution_order=0)
         serializer.save(user=self.request.user,execution_order=1)
         app.control.purge()
-        # print(app.control.inspect().active(),"inside views",job)
-        # for worker, tasks in app.control.inspect().active().items():
-        #     print(tasks)
-        # Instantiate the JobScheduler
-        # job_scheduler = JobScheduler()
-        # start_schedule_jobs()
         schedule_jobs()
 
-
-
-        # Add the created job to the scheduler
-        # job_scheduler.add_job(job)
-        # job_scheduler.schedule_jobs()
+class JobDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, id):
+        try:
+            job = Job.objects.get(id=id)
+            serializer = JobSerializer(job)
+            return Response(serializer.data)
+        except Job.DoesNotExist:
+            return Response({"error": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])  # Add authentication if needed
