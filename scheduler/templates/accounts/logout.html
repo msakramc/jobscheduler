@@ -1,0 +1,16 @@
+{% extends 'common/account_layout.html'%}
+
+{% block body %}
+<div class="wrapper">
+
+    <div class="form-signin">
+        <h1>Sign Out</h1>
+        <p>Are you sure you want to sign out?</p>
+        <form method="post" action="/accounts/logout/">
+            {% csrf_token %}
+        
+            <button type="submit">Sign Out</button>
+        </form>
+    </div>
+</div>
+{% endblock body %}

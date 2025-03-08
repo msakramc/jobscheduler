@@ -1,0 +1,42 @@
+{% extends 'common/account_layout.html'%}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block body %}
+
+<div class="wrapper">
+  <form class="login form-signin"  method="POST" action="/accounts/login/">
+    {{ form.errors }}
+    <div class="form-error">
+  
+    </div>
+  
+    {% csrf_token %}
+      <input type="hidden" name="next" value="dashboard">
+      <div class="d-flex justify-content-center">
+      </div>
+     <h3 class="form-signin-heading text-center">Login</h3> 
+     <input class="form-control mb-2" type="text" name="username" placeholder="Username"
+     autocomplete="username" maxlength="150" required="" id="id_login">
+     <input class="form-control" type="password" name="password" placeholder="Password"
+     autocomplete="current-password" required="" id="id_password">    
+     <label class="checkbox">
+      <input type="checkbox" name="remember" id="id_remember"> Remember me
+     </label>
+     <button class="btn btn-lg btn-primary btn-block" type="submit" style="background: #60a6a2;border: #60a6a2;">Login</button>   
+  </form>
+</div>
+
+{% endblock body %}
+
+
+{% block script %}
+  <script>
+    var list_in_errors = $('.form-signin>ul>li>ul>li')
+    var error_html = ''
+    for(var i=0;i<list_in_errors.length;i++){
+      error_html+= `<div class="alert alert-danger p-1">${$(list_in_errors[i]).text()}</div>`
+    }
+    $('.form-error').html(error_html)
+  </script>
+{% endblock %}
