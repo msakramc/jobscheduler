@@ -38,6 +38,7 @@ PROJECT STRUCTURE
 # SAMPLE SHOWN BELOW
 # DATABASE_URL=postgres://username:password@host:port/database
 # !!! MAKE SURE YOU HAD CREATED THE DATABASE BEFORE MIGRATE
+# YOU CAN VIEW DATABASE SCHEMA INSIDE SCHEDULER/MODELS.PY
 
 # Now run below command to migrate the tables to database
 5. python manage.py migrate
